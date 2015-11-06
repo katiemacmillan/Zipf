@@ -42,10 +42,6 @@ class Hashtable
         int getSize ();
         float getVolume ();
 
-        /******Setters******/
-        void setCount(int, int);
-        void setKey(const string&, int);
-
         /******Functions******/
         void Hash (const string& );
 

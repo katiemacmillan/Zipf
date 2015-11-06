@@ -7,6 +7,7 @@
 **********************************************************************/
 Hashtable :: Hashtable( int n )
 {
+	//create new table of size n, set size to n
 	table = new Data[n];
 	size = n;
 }
@@ -16,8 +17,12 @@ Hashtable :: Hashtable( int n )
 **********************************************************************/
 Hashtable :: Hashtable( const Hashtable& hash )
 {
-	table = new Data[hash.size];
-	for (int i = 0; i < hash.size; i++)
+	//create new table same size as hash
+	size = hash.size;
+	table = new Data[size];
+
+	//copy values from hash into new table
+	for (int i = 0; i < size; i++)
 	{
 		table[i].count = hash.table[i].count;
 		table[i].key = hash.table[i].key;
@@ -36,19 +41,39 @@ Hashtable :: ~Hashtable()
 These get functions retrieve the individual components of the Hashtable
 object
 **********************************************************************/
-int Hashtable :: getCount(int i){ return table[i].count; }
-string Hashtable :: getKey(int i){ return table[i].key; }
+//Returns the count of a given index into the table
+int Hashtable :: getCount(int i)
+{ 
+	if ((i < 0)||(i >= size))
+		return -1;				//invalid index
+
+	return table[i].count; 
+}
+//Returns the Key string for a given index. Returns "" if empty.
+string Hashtable :: getKey(int i)
+{ 
+	if ((i < 0)||(i >= size))
+		return "BAD INDEX";
+
+	return table[i].key; 
+}
+
+//Returns the stored size of the hashtable
 int Hashtable :: getSize () {return size;}
+
+//Returns the index containing a given string, -1 if not found
 int Hashtable :: getIndex(const string& k)
 {
 	int i = 0;
 	for (i; i < size; i++)
-	{
+		//find matching string in table, return index
 		if (table[i].key == k)
 			return i;
-	}
-	return -1;
+
+	return -1;			//string not found in table
 }
+
+//Returns how full the hashtable is.
 float Hashtable :: getVolume ()
 {
 	int count = 0;
@@ -60,15 +85,6 @@ float Hashtable :: getVolume ()
 	//volume = count / table size
 	return (float)count/size;
 }
-/**********************************************************************
-                            Setters
-**********************************************************************
-These set functions set the individual components of the Hashtable object
-to new values
-**********************************************************************/
-void Hashtable :: setCount( int c, int i ) { table[i].count = c; }
-
-void Hashtable :: setKey( const string& k,int i ) { table[i].key = k; }
 
 /**********************************************************************
                             Hash
@@ -79,8 +95,8 @@ table.
 **********************************************************************/
 void Hashtable :: Hash (const string& k)
 {
-	int index = 0;
-	int num = 0;
+	int index = 0;				//hashed index number
+	int num = 0;				//key translated into an integer
 	int i;
 
 	//convert characters of k into a number to be hashed
@@ -91,12 +107,15 @@ void Hashtable :: Hash (const string& k)
 	index = hashFunction(num);
 
 	i = 1;										//probe sequence modifier
+
 	//probe table until either empty spot or matching key is found
 	while ((table[index].count != 0) && (table[index].key != k))
 		//i^2, after evaluation increment i, don't go larger than size of table
 		index = hashFunction ((num + (i * i++)) % size);
+
 	if (table[index].key == k)		//increase frequency count if key is already there 
 		table[index].count++;
+
 	else
 	{											//Insert key and increment count
 		table[index].key = k;
@@ -113,14 +132,16 @@ the hashtable
 **********************************************************************/
 int Hashtable :: hashFunction (int n)
 {
-	//integer key (k) to a small integer bucket 
-	//Return: value h(k). 
-	//m is the size of the hash table (number of buckets). 
-	//Choose m to be a power of 2. --> 342 
-	//Let A be some random-looking real number. Knuth suggests M = 0.5*(sqrt(5) - 1). Then do the following:
-    float s = n*(0.5*(sqrt(5) - 1));
-    float x = s - (int) s;			//fractional part of s
-    int index = floor(342*x);
-    index = index % size;
+	/*A suggested formula for hashfunctions involved multiplying
+	n by a natual number, then multiplying the fractionl part of that
+	number by a multiple of 2. Mod the number by the size of table to
+	achieve index.*/
+
+	
+    float r = n*(0.5*(sqrt(5) - 1));	//n* real number
+    float f = r - (int) r;				//fractional part of s
+    int index = floor(342*f);			//342*f rounded down
+    index = index % size;				//Mod index by table size
+
     return index;
 }
