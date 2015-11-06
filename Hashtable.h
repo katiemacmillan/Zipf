@@ -22,6 +22,7 @@ class Hashtable
             string key;
         };
         Data* table;
+        int size;
         int hashFunction( int );
 
     public:
@@ -38,6 +39,8 @@ class Hashtable
         int getCount(int);
         string getKey(int);
         int getIndex(const string&);
+        int getSize ();
+        float getVolume ();
 
         /******Setters******/
         void setCount(int, int);
@@ -45,6 +48,6 @@ class Hashtable
 
         /******Functions******/
         void Hash (const string& );
-        double getVolume ();
+
 };
 #endif

@@ -8,6 +8,7 @@
 Hashtable :: Hashtable( int n )
 {
 	table = new Data[n];
+	size = n;
 }
 
 /**********************************************************************
@@ -15,8 +16,8 @@ Hashtable :: Hashtable( int n )
 **********************************************************************/
 Hashtable :: Hashtable( const Hashtable& hash )
 {
-	table = new Data[sizeof(hash.table)];
-	for (int i = 0; i < sizeof(hash.table); i++)
+	table = new Data[hash.size];
+	for (int i = 0; i < hash.size; i++)
 	{
 		table[i].count = hash.table[i].count;
 		table[i].key = hash.table[i].key;
@@ -37,17 +38,28 @@ object
 **********************************************************************/
 int Hashtable :: getCount(int i){ return table[i].count; }
 string Hashtable :: getKey(int i){ return table[i].key; }
+int Hashtable :: getSize () {return size;}
 int Hashtable :: getIndex(const string& k)
 {
 	int i = 0;
-	for (i; i < sizeof(table); i++)
+	for (i; i < size; i++)
 	{
 		if (table[i].key == k)
 			return i;
 	}
 	return -1;
 }
+float Hashtable :: getVolume ()
+{
+	int count = 0;
+	//count how many positions are filled
+	for (int i = 0; i < size; i++)
+		if (table[i].count != 0)
+			count++;
 
+	//volume = count / table size
+	return (float)count/size;
+}
 /**********************************************************************
                             Setters
 **********************************************************************
@@ -82,7 +94,7 @@ void Hashtable :: Hash (const string& k)
 	//probe table until either empty spot or matching key is found
 	while ((table[index].count != 0) && (table[index].key != k))
 		//i^2, after evaluation increment i, don't go larger than size of table
-		index = hashFunction ((num + (i * i++)) % sizeof(table));
+		index = hashFunction ((num + (i * i++)) % size);
 	if (table[index].key == k)		//increase frequency count if key is already there 
 		table[index].count++;
 	else
@@ -106,26 +118,9 @@ int Hashtable :: hashFunction (int n)
 	//m is the size of the hash table (number of buckets). 
 	//Choose m to be a power of 2. --> 342 
 	//Let A be some random-looking real number. Knuth suggests M = 0.5*(sqrt(5) - 1). Then do the following:
-    cout << "n: " << n << endl;
-    double s = n*(0.5*(sqrt(5) - 1));
-    cout << "s: " << s << endl;
+    float s = n*(0.5*(sqrt(5) - 1));
     float x = s - (int) s;			//fractional part of s
-    cout << "x: " << x << endl;
     int index = floor(342*x);
-    cout << "index: " << index << endl;
-    index = index % sizeof(table);
-    cout << "index: " << index << endl;
+    index = index % size;
     return index;
-}
-
-double Hashtable :: getVolume ()
-{
-	int count = 0;
-	//count how many positions are filled
-	for (int i = 0; i < sizeof(table); i++)
-		if (table[i].count != 0)
-			count++;
-
-	//volume = count / table size
-	return count/(sizeof(table)+1);
 }
