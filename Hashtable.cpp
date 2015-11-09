@@ -147,8 +147,10 @@ table.
 **********************************************************************/
 int Hashtable :: InsertHash ( const string& k)
 {
-	int num = ConvertKey(k);
-
+	int num = 0;
+	//convert characters of k into a number to be hashed
+	for (int i = 0; i < k.size(); i++)
+		num += (int)k[i];
 	//Get hashed index
 	int index = HashFunction(num);
 
@@ -166,8 +168,10 @@ int Hashtable :: InsertHash ( const string& k)
 
 int Hashtable :: FindHash (const string& k)
 {
-	int num = ConvertKey(k);
-
+	int num = 0;
+	//convert characters of k into a number to be hashed
+	for (int i = 0; i < k.size(); i++)
+		num += (int)k[i];
 	//Get hashed index
 	int index = HashFunction(num);
 
@@ -272,14 +276,7 @@ int Hashtable :: Rehash ()
 	}
 }
 
-int Hashtable :: ConvertKey (const string& k)
-{
-	int num = 0;
-	//convert characters of k into a number to be hashed
-	for (int i = 0; i < k.size(); i++)
-		num += (int)k[i];
-	return num;
-}
+
 
 bool Hashtable :: IsPrime (int n)
 {
