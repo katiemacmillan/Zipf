@@ -98,6 +98,50 @@ float Hashtable :: getVolume ()
 	return (float)count/size;
 }
 
+
+/**********************************************************************
+                            Setters
+**********************************************************************
+The only setting of indices a user can do is remove items from the
+table. Users may not manually set the count or key of a specific 
+index. Nor may they manually set the count of a specific key.
+**********************************************************************/
+
+//Remove entry by index
+void Hashtable :: Remove(int i)
+{ 
+	if ((i < 0)||(i >= size))
+		return;				//invalid index
+	table[i].count = 0;
+	table[i].key = "";
+}
+
+//Remove entry by string
+void Hashtable :: Remove(string k)
+{ 
+	int num = 0;
+	int i;
+	//convert characters of k into a number to be hashed
+	for (int i = 0; i < k.size(); i++)
+		num += (int)k[i];
+
+	int index = hashFunction(num);
+	i = 0;
+	while ((table[index].count != 0) && (table[index].key != k))
+	{
+		//i^2, after evaluation increment i, don't go larger than size of table
+		index = hashFunction ((num + (i * i)) % size);
+		i++;
+	}
+
+	if (table[index].key == k)		//if key is there, remove it & count 
+	{
+		table[index].key = "";
+		table[index].count = 0;
+	}
+}
+
+
 /**********************************************************************
                             Hash
 **********************************************************************
@@ -160,3 +204,4 @@ int Hashtable :: hashFunction (int n)
 
     return index;
 }
+

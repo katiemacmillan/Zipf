@@ -43,6 +43,9 @@ class Hashtable
         int getSize ();
         float getVolume ();
 
+        /******Setters******/
+        void Remove(int);
+        void Remove(string);
         /******Functions******/
         void Hash (const string& );
 

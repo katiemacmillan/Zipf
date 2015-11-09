@@ -43,9 +43,9 @@ int main (int argc, char** argv)
 	cout << "The table is " << (table->getVolume())*100 << "% full." << endl;
 
 	//Display lookup of key and count by index number
-	for (int i = 0; i < 97; i++)
+	for (int i = 0; i < 5; i++)
 		if (table->getCount(i) != 0)
-			cout << "Index: " << i << "\tString: " << table->getKey(i) << "\tCount: " << table->getCount(i) << endl;
+			cout << "Index: " << indices[i] << "\tString: " << table->getKey(indices[i]) << "\tCount: " << table->getCount(indices[i]) << endl;
 
 	//print data for an outof bounds index
 	cout << "Index: -1" << "\tString: " << table->getKey(-1) << "\tCount: " << table->getCount(-1) << endl;		
@@ -78,7 +78,18 @@ int main (int argc, char** argv)
 	//display index and count of a key not in the table
 	cout << "String: earth\tIndex: " << table->getIndex("earth") << " \tCount: " << table->getCount("earth") << endl;
 
+	/*I know the index of "hello" is in indices[0], so I'm going to delete that index from the table*/
+	table->Remove(indices[0]);
+	cout << "String: hello\tIndex: " << table->getIndex("hello") << " \tCount: " << table->getCount("hello") << endl;
+	//I know the index of "happy" is in indices[3]
+	cout << "Index: " << indices[0] << "\tString: " << table->getKey(indices[0]) << "\tCount: " << table->getCount(indices[0]) << endl;
 	
+	/*Remove the string "happy" from the table, then try to print data by key*/
+	table->Remove("happy");
+	cout << "String: happy\tIndex: " << table->getIndex("happy") << " \tCount: " << table->getCount("happy") << endl;
+	//I know the index of "happy" is in indices[3]
+	cout << "Index: " << indices[3] << "\tString: " << table->getKey(indices[3]) << "\tCount: " << table->getCount(indices[3]) << endl;
+
 
 	return 0;
 }
