@@ -37,6 +37,7 @@ class Hashtable
 
         /******Getters******/
         int getCount(int);
+        int getCount(string);
         string getKey(int);
         int getIndex(const string&);
         int getSize ();

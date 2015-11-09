@@ -49,6 +49,18 @@ int Hashtable :: getCount(int i)
 
 	return table[i].count; 
 }
+//Returns the count of a given string
+int Hashtable :: getCount(string k)
+{ 
+	int i = 0;
+	for (i; i < size; i++)
+		//find matching string in table, return index
+		if (table[i].key == k)
+			return table[i].count;
+
+	return 0;			//string not found in table
+}
+
 //Returns the Key string for a given index. Returns "" if empty.
 string Hashtable :: getKey(int i)
 { 
