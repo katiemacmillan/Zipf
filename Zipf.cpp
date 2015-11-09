@@ -1,4 +1,10 @@
 #include <iostream>
+#include <string>
+#include <vector>
+#include "Globals.h"
+
+#include "Tokenizer.h"
+
 #include "Hashtable.h"
 
 using namespace std;
@@ -7,25 +13,33 @@ int main (int argc, char** argv)
 {
 
 	//series of tests to hash items into a hashtable object
-	Hashtable* table = new Hashtable(97);
+	//Set tablesize to 17 for testing rehashing
+	Hashtable* table = new Hashtable(17);
 	int indices[6] = {0};
 
-
 	//Hash strings into table
-	table->Hash("hello");
+	table->Insert("hello");
+	table->Insert("quetal");
+	table->Insert("hi");
+	table->Insert("sup");
+	table->Insert("bonjour");
+	table->Insert("salutations");
+	table->Insert("coniciwa");
+	table->Insert("mushi");
+	table->Insert("hola");
+	table->Insert("greetings");
 
 	for (int i=0; i< 5; i++)
-		table->Hash("unique");
+		table->Insert("unique");
 
 	for (int i=0; i< 10; i++)
-		table->Hash("clever");
+		table->Insert("clever");
 
 	for (int i=0; i< 17; i++)
-		table->Hash("happy");
+		table->Insert("happy");
 
 	for (int i=0; i< 12; i++)
-		table->Hash("exact");
-
+		table->Insert("exact");
 	/*store indices of each word, plus index of a "not found" word.
 	This is so I have a short list to iterate through of indices,
 	meaning I don't have to pring out a 92 blank lines, and can make sure
@@ -40,7 +54,7 @@ int main (int argc, char** argv)
 
 	//print out table data
 	cout << "The table size is: " << table->getSize() << endl;
-	cout << "The table is " << (table->getVolume())*100 << "% full." << endl;
+	cout << "The table is " << (table->getLoadFactor())*100 << "% full." << endl;
 
 	//Display lookup of key and count by index number
 	for (int i = 0; i < 5; i++)
@@ -89,6 +103,24 @@ int main (int argc, char** argv)
 	cout << "String: happy\tIndex: " << table->getIndex("happy") << " \tCount: " << table->getCount("happy") << endl;
 	//I know the index of "happy" is in indices[3]
 	cout << "Index: " << indices[3] << "\tString: " << table->getKey(indices[3]) << "\tCount: " << table->getCount(indices[3]) << endl;
+
+
+    cout << "Enter a string to tokenize: ";
+    string str;
+    getline( cin, str );
+    
+    // test delimiter version
+    vector<string> tokens1;
+    tokenize1( str, tokens1, DELIMITERS );
+    cout << str << endl;
+    for ( auto t : tokens1 ) cout << t << endl;
+    
+    // test "valid char" version
+    vector<string> tokens2;
+    tokenize2( str, tokens2, VALID );
+    cout << str << endl;
+    for ( auto t : tokens2 ) cout << t << endl;
+
 
 
 	return 0;
