@@ -122,8 +122,11 @@ void Hashtable :: Hash (const string& k)
 
 	//probe table until either empty spot or matching key is found
 	while ((table[index].count != 0) && (table[index].key != k))
+	{
 		//i^2, after evaluation increment i, don't go larger than size of table
-		index = hashFunction ((num + (i * i++)) % size);
+		index = hashFunction ((num + (i * i)) % size);
+		i++;
+	}
 
 	if (table[index].key == k)		//increase frequency count if key is already there 
 		table[index].count++;
