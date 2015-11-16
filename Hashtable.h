@@ -1,4 +1,4 @@
-/* shape.h */
+/******Hashtable.h******/
 
 #ifndef _Hashtable_H_
 #define _Hashtable_H_
@@ -15,22 +15,21 @@ class Hashtable
 {
     /******Class Data******/
     private:
-        //Array of structs
         struct Data
         {
             int count;
             string key;
         };
-        Data* table;
+        Data* table;                    //Array of Data structs to hold data
         int size;                       //How big the table is
         int entries = 0;                //How many items are in the table
-        int HashFunction( int );        //Base hash function
-        int HashFunction2( int );       //Double hashing collision resolution
-        int Rehash ();                  //Rehash the table
-        int FindHash(const string&);    //Hash with probing to find a key
-        int InsertHash(const string&);  //Hash with probing to insert a key
-        bool IsPrime(int);              //Find prime table sizes
 
+        /******Private Functions******/
+        unsigned long HashFunction ( const string& );   //Base hash function
+        int InsertHash ( const string& );               //Hash with probing to insert a key
+        int FindHash ( const string& );                 //Hash with probing to find a key
+        void Rehash ();                                 //Rehash the table
+        bool IsPrime ( int );                           //Find prime table sizes
     public:
         /******Constructor******/
         Hashtable( int = 1033 );
@@ -42,20 +41,20 @@ class Hashtable
         ~Hashtable();
 
         /******Getters******/
-        int getCount(int);
-        int getCount(const string&);
-        string getKey(int);
-        int getIndex(const string&);
-        int getSize ();
-        int getItemCount();
-        float getLoadFactor ();
+        int GetCount ( int );
+        int GetCount ( const string& );
+        string GetKey ( int );
+        int GetIndex ( const string& );
+        int GetSize ();
+        int GetEntryCount ();
+        float GetLoadFactor ();
 
-        /******Setters******/
-        void Remove(int);
-        void Remove(const string&);
-        void Decrease(int);
-        void Decrease(const string&);
-        void Insert (const string& );
+        /******Mutators******/
+        void Insert ( const string& );
+        void Remove ( int );
+        void Remove ( const string& );
+        void Decrease ( int );
+        void Decrease ( const string& );
 
 };
 #endif

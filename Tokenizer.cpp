@@ -1,5 +1,6 @@
-/*
-            ***** tokenizer.cpp *****
+/**********************************************************************
+                        Tokenizer.cpp
+**********************************************************************
 
 String tokenizer, similar to strtok() - but for strings (and safer!).
 
@@ -9,27 +10,52 @@ Author: John M. Weiss, Ph.D.
 Class:  CSC 300 Data Structures
 Date:   Fall 2015
 
-Modifications:
-*/
+Modifications: Utilized only tokenize2 from tokenize.cpp, and modified
+to include single quotes, but only as embeded characters.
+**********************************************************************/
 #include "Tokenizer.h"
 
-// string tokenizer that searches for symbols of a "valid chars" string
+/**********************************************************************
+                        Tokenize
+***********************************************************************
+Tokenize reads a string of characters and looks for unbroken
+collections of predefined valid characters. Each time a new collection 
+of characters is found it is considered a word, and is stored in a
+vector called 'tokens'. The only characters considered valid to form
+words are capital and lowercase letters and single quote characters.
 
+However, the only time we want to include single quote characters is
+when they're embedded in a word. Therefore, when the first valid
+character in a collection is found, it is checked to see if it is a
+single quote character. If it is, the itterator is moved forward one
+position.
+Likewise, when the last valid character in a collection is found it
+is checked to see if it is a single quote character. If it is, the
+itterator for the end of the word is moved back one position.
+Both of these actions will exclude single quote characters that appear
+at the begining or end of a word, but any single quotes within the
+word will still be considered valid.
+***********************************************************************/
 void Tokenize( const string& str, vector<string>& tokens, const string& valid = " " )
 {
-    // skip delimiters to start of first token
+    //skip delimiters to start of first token
     int tokenStart = str.find_first_of( valid, 0 );
-    // find next delimiter (i.e., end of first token)
+    //make sure first character is not '
+    if (str[tokenStart] == '\'')
+        tokenStart++;
+    //find next delimiter (i.e., end of first token)
     int tokenEnd = str.find_first_not_of( valid, tokenStart );
-
-    // loop through input string
+    //make sure last character is not '
+    if (str[tokenEnd] == '\'')
+        tokenEnd--;
+    //loop through input string
     while ( tokenStart != string::npos )
     {
-        // found a token, add it to the vector
+        //found a token, add it to the vector
         tokens.push_back( str.substr( tokenStart, tokenEnd - tokenStart ) );
-        // skip delimiters to start of next token
+        //skip delimiters to start of next token
         tokenStart = str.find_first_of( valid, tokenEnd );
-        // find next delimiter (end of token)
+        //find next delimiter (end of token)
         tokenEnd = str.find_first_not_of( valid, tokenStart );
     }
 }
