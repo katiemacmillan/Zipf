@@ -44,7 +44,7 @@ void tokenize( const string& str, vector<string>& tokens, const string& valid = 
     int tokenEnd = str.find_first_not_of( valid, tokenStart );
 
     // loop through input string
-    while ( tokenStart != string::npos )
+    while ( (unsigned)tokenStart != string::npos )
     {
         if ( str[tokenStart] == '\'')
             tokenStart++;

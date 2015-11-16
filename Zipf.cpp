@@ -70,7 +70,7 @@ int main (int argc, char** argv)
 	{
 		table.Insert(t);
 		wordCount++;
-		if ( t.length() > maxStrLen )
+		if ( t.length() > (unsigned)maxStrLen )
 			maxStrLen = t.length();			
 	}
 
