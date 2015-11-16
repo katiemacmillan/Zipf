@@ -95,7 +95,7 @@ int main (int argc, char** argv)
 
     for (int i = 0; i < count; i++)
     	cout << wordList[i].second << ": " << wordList[i].first << endl;
-    WriteFiles(argv[1],wordList, wordCount, maxStrLen, size);
+    WriteFiles(argv[1],wordList, wordCount, maxStrLen, count);
 
 
 
@@ -190,7 +190,6 @@ void WriteFiles (char* origFile, tableEntry* freq, int nWords, int maxStrLen, in
 		}
     	++rankCount;
 	}
-  	cout << "seg" << endl;
   	delete[] freq;
   	free(wrdFname);
   	free(csvFname);
