@@ -1,8 +1,384 @@
 Zipf's Law: word concordance
 ----------------------------
-File:            ../example.txt
-Total words:     0
-Distinct words:  0
+File:            example.txt
+Total words:     26069
+Distinct words:  1033
 
 Word Frequencies                                               Ranks    Avg Rank
 ----------------                                               -----    --------
+Words occurring 2372 times:                                        1           1
+the         
+
+Words occurring 1118 times:                                        2           2
+and         
+
+Words occurring 1069 times:                                        3           3
+bunyip      
+
+Words occurring 774 times:                                         4           4
+what        
+
+Words occurring 637 times:                                         5           5
+i           
+
+Words occurring 589 times:                                         6           6
+said        
+
+Words occurring 544 times:                                         7           7
+am          
+
+Words occurring 482 times:                                         8           8
+a           
+
+Words occurring 462 times:                                         9           9
+he          
+
+Words occurring 427 times:                                        10          10
+in          
+
+Words occurring 407 times:                                        11          11
+was         
+
+Words occurring 327 times:                                     12-13        12.5
+creek       to          
+
+Words occurring 325 times:                                        14          14
+like        
+
+Words occurring 286 times:                                        15          15
+look        
+
+Words occurring 284 times:                                        16          16
+night       
+
+Words occurring 274 times:                                        17          17
+their       
+
+Words occurring 273 times:                                        18          18
+but         
+
+Words occurring 248 times:                                        19          19
+there       
+
+Words occurring 237 times:                                        20          20
+at          
+
+Words occurring 230 times:                                        21          21
+do          
+
+Words occurring 228 times:                                        22          22
+no          
+
+Words occurring 214 times:                                     23-25          24
+bunyips     handsome    him         
+
+Words occurring 208 times:                                        26          26
+called      
+
+Words occurring 200 times:                                        27          27
+off         
+
+Words occurring 199 times:                                     28-29        28.5
+birds       sitting     
+
+Words occurring 191 times:                                        30          30
+feathers    
+
+Words occurring 188 times:                                        31          31
+very        
+
+Words occurring 182 times:                                        32          32
+horrible    
+
+Words occurring 181 times:                                        33          33
+of          
+
+Words occurring 175 times:                                        34          34
+one         
+
+Words occurring 171 times:                                        35          35
+for         
+
+Words occurring 169 times:                                        36          36
+emu         
+
+Words occurring 165 times:                                     37-38        37.5
+tails       they        
+
+Words occurring 164 times:                                        39          39
+on          
+
+Words occurring 163 times:                                        40          40
+something   
+
+Words occurring 159 times:                                        41          41
+his         
+
+Words occurring 156 times:                                        42          42
+murmured    
+
+Words occurring 155 times:                                        43          43
+wallaby     
+
+Words occurring 149 times:                                        44          44
+berkeley's  
+
+Words occurring 147 times:                                        45          45
+mud         
+
+Words occurring 145 times:                                        46          46
+man         
+
+Words occurring 141 times:                                        47          47
+it          
+
+Words occurring 138 times:                                        48          48
+then        
+
+Words occurring 137 times:                                     49-52        50.5
+heads       hid         under       wings       
+
+Words occurring 136 times:                                        53          53
+again       
+
+Words occurring 128 times:                                        54          54
+by          
+
+Words occurring 126 times:                                        55          55
+you         
+
+Words occurring 118 times:                                        56          56
+platypus    
+
+Words occurring 109 times:                                        57          57
+long        
+
+Words occurring 108 times:                                        58          58
+walked      
+
+Words occurring 107 times:                                        59          59
+all         
+
+Words occurring 102 times:                                        60          60
+drink       
+
+Words occurring 101 times:                                        61          61
+webbed      
+
+Words occurring 100 times:                                        62          62
+feet        
+
+Words occurring 99 times:                                         63          63
+asked       
+
+Words occurring 96 times:                                      64-65        64.5
+into        looked      
+
+Words occurring 95 times:                                         66          66
+have        
+
+Words occurring 94 times:                                         67          67
+out         
+
+Words occurring 93 times:                                      68-69        68.5
+are         up          
+
+Words occurring 92 times:                                      70-71        70.5
+away        fine        
+
+Words occurring 85 times:                                      72-74          73
+late        me          time        
+
+Words occurring 84 times:                                      75-80        77.5
+black       not         particular  reason      someone     stirred     
+
+Words occurring 83 times:                                      81-82        81.5
+bottom      fur         
+
+Words occurring 82 times:                                         83          83
+answer      
+
+Words occurring 81 times:                                         84          84
+still       
+
+Words occurring 79 times:                                      85-87          86
+large       muddy       see         
+
+Words occurring 78 times:                                         88          88
+bank        
+
+Words occurring 75 times:                                      89-90        89.5
+jenny       wagner      
+
+Words occurring 73 times:                                         91          91
+twas        
+
+Words occurring 72 times:                                      92-94          93
+fish        fright      swam        
+
+Words occurring 71 times:                                      95-98        96.5
+came        sighed      trees       when        
+
+Words occurring 68 times:                                         99          99
+along       
+
+Words occurring 67 times:                                        100         100
+pity        
+
+Words occurring 66 times:                                        101         101
+quickly     
+
+Words occurring 65 times:                                        102         102
+tell        
+
+Words occurring 64 times:                                    103-105         104
+morning     scraping    thing       
+
+Words occurring 63 times:                                    106-110         108
+busy        itself      kept        saying      underneath  
+
+Words occurring 62 times:                                    111-112       111.5
+asleep      were        
+
+Words occurring 61 times:                                        113         113
+can         
+
+Words occurring 60 times:                                    114-116         115
+passing     problem     solved      
+
+Words occurring 59 times:                                    117-118       117.5
+contentedly sat         
+
+Words occurring 58 times:                                    119-120       119.5
+had         straight    
+
+Words occurring 57 times:                                        121         121
+dived       
+
+Words occurring 56 times:                                    122-124         123
+answered    nobody      went        
+
+Words occurring 55 times:                                    125-126       125.5
+lost        thought     
+
+Words occurring 54 times:                                        127         127
+nothing     
+
+Words occurring 53 times:                                    128-130         129
+her         presently   will        
+
+Words occurring 52 times:                                    131-132       131.5
+slowly      sure        
+
+Words occurring 50 times:                                    133-136       134.5
+as          finished    firmly      hopefully   
+
+Words occurring 49 times:                                    137-138       137.5
+down        hopped      
+
+Words occurring 48 times:                                        139         139
+find        
+
+Words occurring 47 times:                                        140         140
+else        
+
+Words occurring 45 times:                                    141-146       143.5
+an          behind      bushes      rustling    shot        suddenly    
+
+Words occurring 44 times:                                    147-150       148.5
+after       past        running     wait        
+
+Words occurring 43 times:                                    151-152       151.5
+considered  stopped     
+
+Words occurring 42 times:                                    153-156       154.5
+each        how         last        many        
+
+Words occurring 41 times:                                        157         157
+replied     
+
+Words occurring 40 times:                                    158-159       158.5
+even        more        
+
+Words occurring 39 times:                                    160-163       161.5
+crouched    low         settled     streaked    
+
+Words occurring 38 times:                                        164         164
+distance    
+
+Words occurring 36 times:                                    165-166       165.5
+sadly       wandered    
+
+Words occurring 35 times:                                    167-171         169
+anyone      bag         listen      who         would       
+
+Words occurring 32 times:                                    172-176         174
+further     met         notebook    saw         with        
+
+Words occurring 31 times:                                    177-180       178.5
+did         i'm         pencil      sh          
+
+Words occurring 30 times:                                        181         181
+waited      
+
+Words occurring 29 times:                                    182-184         183
+clearly     please      yes         
+
+Words occurring 28 times:                                    185-187         186
+anything    looking     without     
+
+Words occurring 27 times:                                        188         188
+billabong   
+
+Words occurring 26 times:                                    189-190       189.5
+quite       right       
+
+Words occurring 25 times:                                    191-195         193
+comb        exist       put         simply      through     
+
+Words occurring 23 times:                                    196-198         197
+deep        shaken      sigh        
+
+Words occurring 22 times:                                    199-200       199.5
+back        just        
+
+Words occurring 21 times:                                    201-205         203
+belongings  fished      packed      water       waterhole   
+
+Words occurring 20 times:                                    206-207       206.5
+go          them        
+
+Words occurring 18 times:                                    208-211       209.5
+day         mirror      setting     sun         
+
+Words occurring 17 times:                                    212-214         213
+himself     quiet       this        
+
+Words occurring 16 times:                                    215-217         216
+be          here        unpacked    
+
+Words occurring 15 times:                                    218-219       218.5
+laid        sand        
+
+Words occurring 14 times:                                    220-221       220.5
+billy       boil        
+
+Words occurring 12 times:                                    222-223       222.5
+spoke       that        
+
+Words occurring 10 times:                                    224-225       224.5
+stared      surprise    
+
+Words occurring 6 times:                                     226-228         227
+delight     jumped      shouted     
+
+Words occurring 5 times:                                     229-230       229.5
+other       really      
+
+Words occurring 4 times:                                     231-232       231.5
+happily     lent        
+
+Words occurring 3 times:                                         233         233
+prove       
+
+Words occurring 577 times:                                       234         234

@@ -43,6 +43,7 @@ int main (int argc, char** argv)
 	string temp;
     ifstream infile;
     int maxStrLen = 0;
+    int wordCount = 0;
 
 
     if ( argc != 2 )
@@ -68,6 +69,7 @@ int main (int argc, char** argv)
 		{
 			transform(t.begin(), t.end(), t.begin(), ::tolower);
 			table->Insert(t);
+			wordCount++;
 			if ( t.length() > maxStrLen )
 				maxStrLen = t.length();			
 		}
@@ -75,11 +77,26 @@ int main (int argc, char** argv)
 
 	int count = table->GetEntryCount();
 	int size = table->GetSize();
-	tableEntry* wordList = new pair<int, string>[size];
+	tableEntry* wordList = new pair<int, string>[count];
     int j = 0;
+    for (int i = 0; i < size; i++)
+    {
+    	int k = table->GetCount(i);
+    	if (k != 0)
+    	{
+    		wordList[j].first = k;
+    		wordList[j].second = table->GetKey(i);
+    		j++;
+    	}
+    }
 
-    qsort(wordList, size, sizeof(tableEntry), Compare);
-    WriteFiles(argv[1],wordList, count, maxStrLen, size);
+
+    qsort(wordList, count, sizeof(tableEntry), Compare);
+
+    for (int i = 0; i < count; i++)
+    	cout << wordList[i].second << ": " << wordList[i].first << endl;
+    WriteFiles(argv[1],wordList, wordCount, maxStrLen, size);
+
 
 
 	return 0;
@@ -156,6 +173,7 @@ void WriteFiles (char* origFile, tableEntry* freq, int nWords, int maxStrLen, in
 	      	int nCols = 80 / maxStrLen;
 	      	for (auto rankit = rankBegin; rankit < freqit; ++rankit) 
 	      	{
+
 				wrdout << setw(maxStrLen+1) << setfill(' ') << left << rankit->second;
 				if (++colIdx == nCols) 
 				{
@@ -172,6 +190,7 @@ void WriteFiles (char* origFile, tableEntry* freq, int nWords, int maxStrLen, in
 		}
     	++rankCount;
 	}
+  	cout << "seg" << endl;
   	delete[] freq;
   	free(wrdFname);
   	free(csvFname);
