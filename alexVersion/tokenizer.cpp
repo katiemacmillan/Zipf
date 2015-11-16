@@ -10,6 +10,7 @@ Tokenizer::~Tokenizer() {
 std::string Tokenizer::Next() {
   int index = -1;
   int c = stream.get();
+  while (c == ' ' || c == '\n' || c == '\t') {c = stream.get();};
   while(true) {
     if (c >= 'A' && c <= 'Z') {
       buffer[++index] = c;

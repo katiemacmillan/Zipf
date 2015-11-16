@@ -1,10 +1,11 @@
 #include "hashtable.hpp"
+#include <iostream>
 
 #define PROBE_LINEAR 1
 #define PROBE_QUADRATIC 2
 #define PROBE_DOUBLEHASH 3
 #ifndef PROBE_SEQUENCE
-#define PROBE_SEQUENCE LINEAR
+#define PROBE_SEQUENCE PROBE_LINEAR
 #endif
 
 using namespace std;
@@ -86,6 +87,7 @@ int Hashtable::Insert(string& key) {
   ++size;
   if (size*4 > capacity*3) { //Check 0.75 load factor
     EnsureCapacity(capacity*2);
+    cout << "rehashing to " << capacity << endl;
   }
   int index = hash(key) % capacity;
 #if PROBE_SEQUENCE == PROBE_QUADRATIC
@@ -155,6 +157,7 @@ int Hashtable::Remove(string& key) {
     val = table[index].first;
     table[index].first = -1;
   }
+  --size;
   return val;
 }
 
