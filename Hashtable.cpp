@@ -35,29 +35,30 @@ entry counts can be decremented using the Decrease function.
 /**********************************************************************
                             Constructor
 **********************************************************************/
-Hashtable :: Hashtable ( int n )
+Hashtable::Hashtable ( int n )
 {
 	//create new table of size n, set size to n
-	table = new Data[n];
+	table = new tableEntry[n];
 	size = n;
 }
+
 
 /**********************************************************************
                             Copy Constructor
 **********************************************************************/
-Hashtable :: Hashtable ( const Hashtable& hash )
+Hashtable::Hashtable ( const Hashtable& hash )
 {
 	//create new table same size as hash
 	size = hash.size;
-	table = new Data[size];
+	table = new tableEntry[size];
 
 	//copy values from hash into new table
 	for ( int i = 0; i < size; i++ )
 	{
-		if ( table[i].key != "" )
+		if ( table[i].second != "" )
 		{
-			table[i].count = hash.table[i].count;
-			table[i].key = hash.table[i].key;
+			table[i].first = hash.table[i].first;
+			table[i].second = hash.table[i].second;
 		}
 	}
 }
@@ -65,7 +66,7 @@ Hashtable :: Hashtable ( const Hashtable& hash )
 /**********************************************************************
                             Destructor
 **********************************************************************/
-Hashtable :: ~Hashtable ()
+Hashtable::~Hashtable ()
 {}
 
 /***************************Getters***********************************/
@@ -86,19 +87,19 @@ to determine the string's index in the table. If the string is found
 then the corresponding count field for its index is returned to the
 user. Otherwise, 0 is returned.
 **********************************************************************/
-int Hashtable :: GetCount ( int i )
+int Hashtable::GetCount ( int i )
 { 
 	if ( ( i < 0 ) || ( i >= size ) )
 		return -1;				//invalid index
 
-	return table[i].count; 
+	return table[i].first; 
 }
 
-int Hashtable :: GetCount ( const string& k )
+int Hashtable::GetCount ( const string& k )
 { 
-	int index = FindHash(k);
-	if ( index > -1 )
-		return table[index].count;
+	int i = FindHash(k);
+	if ( i > -1 )
+		return table[i].first;
 
 	return 0;					//string not found in table
 }
@@ -111,12 +112,12 @@ and then returns to the user the string that is held in that index's
 key field. If the value in 'i' is not a valid index into the table,
 the string "*BAD INDEX*" is returned to the user instead. 
 **********************************************************************/
-string Hashtable :: GetKey ( int i )
+string Hashtable::GetKey ( int i )
 { 
 	if ( ( i < 0 ) || ( i >= size ) )
 		return "*BAD INDEX*";
 
-	return table[i].key; 
+	return table[i].second; 
 }
 
 /**********************************************************************
@@ -127,7 +128,7 @@ utilizes the FindHash function to determine the key's position index
 in the table. This index is returned to the user. It will return as
 a -1 from FindHash if the key is not found in the table.
 **********************************************************************/
-int Hashtable :: GetIndex ( const string& k ){ return FindHash(k); }
+int Hashtable::GetIndex ( const string& k ){ return FindHash(k); }
 
 
 /**********************************************************************
@@ -139,7 +140,7 @@ just the filled ones.
 The table size is stored in the 'size' variable within the hashtable
 class.
 **********************************************************************/
-int Hashtable :: GetSize () { return size; }
+int Hashtable::GetSize () { return size; }
 
 /**********************************************************************
                             GetEntryCount
@@ -148,7 +149,7 @@ This function returns the total number of filled positions that exist
 in the hashtable. This data is stored in the 'entries' variable in 
 the hashtable class.
 **********************************************************************/
-int Hashtable :: GetEntryCount () { return entries; }
+int Hashtable::GetEntryCount () { return entries; }
 
 /**********************************************************************
                             GetLoadFactor
@@ -158,7 +159,7 @@ which is filled. This number is found by dividing the stored number
 of filled positions in the 'entries' variable by the stored size of
 the table in the 'size' variable.
 **********************************************************************/
-float Hashtable :: GetLoadFactor () { return (float) entries / size; }
+float Hashtable::GetLoadFactor () { return (float) entries / size; }
 
 /***************************Mutators**********************************/
 
@@ -175,21 +176,24 @@ its count field is set to 1 and the hashtable's 'entries' variable
 is incremented by one, indicating that another entry has been added
 to the table.
 **********************************************************************/
-void Hashtable :: Insert ( const string& k )
+void Hashtable::Insert ( const string& k )
 {
-	int index = InsertHash(k);
+	int i = InsertHash(k);
 
-	if ( table[index].key == k )		//increase frequency count if key is already there 
-		table[index].count++;
+	if ( table[i].second == k )		//increase frequency count if key is already there 
+		table[i].first++;
 
 	else
 	{									//insert key and increment count
-		table[index].key = k;
-		table[index].count = 1;
+		table[i].second = k;
+		table[i].first = 1;
 		entries++;						//increment number of items in table
 		
 		if ( ( (float) entries / size ) > 0.75 )
+		{
+			cout << "Table is at least 75% full!\nRehashing now..."<< endl;
 			Rehash();					//if table is more than 75% full after insert, rehash it
+		}
 	}	
 }
 
@@ -209,23 +213,23 @@ When a string is passed to the function, the FindHash function is used
 to determine the string's index in the table. If the string is found
 then the entry at its index is removed
 **********************************************************************/
-void Hashtable :: Remove ( int i )
+void Hashtable::Remove ( int i )
 { 
 	if ( ( i < 0 ) || ( i >= size ) )
 		return;							//invalid index
-	table[i].count = 0;
-	table[i].key = "*DELETED*";
+	table[i].first = 0;
+	table[i].second = "*DELETED*";
 	entries--;
 }
 
-void Hashtable :: Remove ( const string& k )
+void Hashtable::Remove ( const string& k )
 { 
-	int index = FindHash(k);
+	int i = FindHash(k);
 
-	if ( table[index].key == k )		//if key is there, remove it reset count 
+	if ( table[i].second == k )		//if key is there, remove it reset count 
 	{
-		table[index].key = "*DELETED*";
-		table[index].count = 0;
+		table[i].second = "*DELETED*";
+		table[i].first = 0;
 		entries--;						//decrement entries count
 	}
 }
@@ -246,23 +250,23 @@ When a string is passed to the function, the FindHash function is used
 to determine the string's index in the table. If the string is found
 then the corresponding count field for its index is decremented.
 **********************************************************************/
-void Hashtable :: Decrease ( int i )			//decrease the count of an index
+void Hashtable::Decrease ( int i )			//decrease the count of an index
 { 
 	if ( ( i < 0 ) || ( i >= size ) )
 		return;									//invalid index
-	table[i].count--;
-	if ( table[i].count == 0 )
-		table[i].key = "*DELETED*";
+	table[i].first--;
+	if ( table[i].first == 0 )
+		table[i].second = "*DELETED*";
 }
 
 
-void Hashtable :: Decrease ( const string& k )	//decrease the count of a string
+void Hashtable::Decrease ( const string& k )	//decrease the count of a string
 { 
-	int index = FindHash(k);
-	if ( table[index].key == k )				//if key is there, decrement count 
-		table[index].count--;
-	if ( table[index].count == 0 )				//if count hits 0, mark key as deleted
-		table[index].key = "*DELETED*";
+	int i = FindHash(k);
+	if ( table[i].second == k )				//if key is there, decrement count 
+		table[i].first--;
+	if ( table[i].first == 0 )				//if count hits 0, mark key as deleted
+		table[i].second = "*DELETED*";
 }
 
 /***************************PrivateFunctions**************************/
@@ -278,7 +282,7 @@ by 33, and the numeric value of the character in 'k[i]' is added.
 This method for a hashfunction was derived from formula "djb2" at
 http://www.cse.yorku.ca/~oz/hash.html
 **********************************************************************/
-unsigned long Hashtable :: HashFunction ( const string& k )
+unsigned long Hashtable::HashFunction ( const string& k )
 {
     unsigned long hash = 5381;
 
@@ -301,15 +305,15 @@ held entries, but which were deleted, thus wasting as little space
 within the table as possible.
 
 **********************************************************************/
-int Hashtable :: InsertHash ( const string& k )
+int Hashtable::InsertHash ( const string& k )
 {
-	int index = ( HashFunction(k) )%size;
+	int i = ( HashFunction(k) )%size;
 
 	//probe table until either empty/deleted spot or matching key is found
-	while ( (table[index].count != 0 ) && ( table[index].key != k ) )
-		index = ( index + 1 ) % size;
+	while ( (table[i].first != 0 ) && ( table[i].second != k ) )
+		i = ( i + 1 ) % size;
 	
-	return index;
+	return i;
 }
 
 /**********************************************************************
@@ -323,16 +327,16 @@ or when an empty string is encountered. This ensures that if an entry
 which preceeds the target gets deleted, the probe sequence will 
 continue to search past it for the target string.
 **********************************************************************/
-int Hashtable :: FindHash ( const string& k )
+int Hashtable::FindHash ( const string& k )
 {
-	int index = ( HashFunction(k) ) % size;
+	int i = ( HashFunction(k) ) % size;
 
 	//probe table until either empty string or matching key is found
-	while ( ( table[index].key != "" ) && ( table[index].key != k ) )
-		index = ( index + 1 ) % size;	//linear probing
+	while ( ( table[i].second != "" ) && ( table[i].second != k ) )
+		i = ( i + 1 ) % size;	//linear probing
 	
-	if ( table[index].key == k )
-		return index;
+	if ( table[i].second == k )
+		return i;
 	else 
 		return -1;						//not in the table
 }
@@ -351,10 +355,10 @@ table which were not empty or deleted are inserted into the new
 table using the Insert function, so they are hashed to new locations
 within the new table.
 **********************************************************************/
-void Hashtable :: Rehash ()
+void Hashtable::Rehash ()
 {
 	//store data values
-	Data* temp = table;
+	tableEntry* temp = table;
 	int oldSize = size;
 
 	//get new table size
@@ -363,18 +367,18 @@ void Hashtable :: Rehash ()
 		size++;
 
 	//resize table
-	table = new Data [size];
+	table = new tableEntry [size];
 	int index;
 
 	//hash entries from orginal table into new table
 	for ( int i = 0; i < oldSize; i++ )
 	{
 		//skip empty and deleted entries
-		if ( ( table[i].key != "" ) && ( table[i].key != "*DELETED*" ) )
+		if ( ( temp[i].second != "" ) && ( temp[i].second != "*DELETED*" ) )
 		{
-			index = InsertHash ( temp[i].key );
-			table[index].key = temp[i].key;
-			table[index].count = temp[i].count;
+			index = InsertHash ( temp[i].second );
+			table[index].second = temp[i].second;
+			table[index].first = temp[i].first;
 		}
 	}
 }
@@ -391,7 +395,7 @@ than the square root of 'n'. With each incrementation, IsPrime checks
 to see if 'n' is divisible by 'i'. If at any point it is, then 'n' is 
 not a prime number, and false is returned.
 **********************************************************************/
-bool Hashtable :: IsPrime ( int n )
+bool Hashtable::IsPrime ( int n )
 {
     if ( n % 2 == 0 ) return false;				//is n divisible by 2
 

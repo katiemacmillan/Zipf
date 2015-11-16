@@ -11,16 +11,13 @@
 
 using namespace std;
 
+typedef pair<int, std::string> tableEntry;
+
 class Hashtable
 {
     /******Class Data******/
     private:
-        struct Data
-        {
-            int count;
-            string key;
-        };
-        Data* table;                    //Array of Data structs to hold data
+        tableEntry* table;                    //Array of Data structs to hold data
         int size;                       //How big the table is
         int entries = 0;                //How many items are in the table
 
@@ -32,8 +29,7 @@ class Hashtable
         bool IsPrime ( int );                           //Find prime table sizes
     public:
         /******Constructor******/
-        Hashtable( int = 1033 );
-
+        Hashtable( int n = 1033);
         /******Copy Constructor******/
         Hashtable( const Hashtable& );
 

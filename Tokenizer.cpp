@@ -36,26 +36,25 @@ Both of these actions will exclude single quote characters that appear
 at the begining or end of a word, but any single quotes within the
 word will still be considered valid.
 ***********************************************************************/
-void Tokenize( const string& str, vector<string>& tokens, const string& valid = " " )
+void tokenize( const string& str, vector<string>& tokens, const string& valid = " " )
 {
-    //skip delimiters to start of first token
+    // skip delimiters to start of first token
     int tokenStart = str.find_first_of( valid, 0 );
-    //make sure first character is not '
-    if (str[tokenStart] == '\'')
-        tokenStart++;
-    //find next delimiter (i.e., end of first token)
+    // find next delimiter (i.e., end of first token)
     int tokenEnd = str.find_first_not_of( valid, tokenStart );
-    //make sure last character is not '
-    if (str[tokenEnd] == '\'')
-        tokenEnd--;
-    //loop through input string
+
+    // loop through input string
     while ( tokenStart != string::npos )
     {
-        //found a token, add it to the vector
+        if ( str[tokenStart] == '\'')
+            tokenStart++;
+        if ( str[tokenEnd] == '\'')
+            tokenEnd--;
+        // found a token, add it to the vector
         tokens.push_back( str.substr( tokenStart, tokenEnd - tokenStart ) );
-        //skip delimiters to start of next token
+        // skip delimiters to start of next token
         tokenStart = str.find_first_of( valid, tokenEnd );
-        //find next delimiter (end of token)
+        // find next delimiter (end of token)
         tokenEnd = str.find_first_not_of( valid, tokenStart );
     }
 }
