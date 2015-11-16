@@ -27,7 +27,6 @@ class Hashtable
         int HashFunction( int );        //Base hash function
         int HashFunction2( int );       //Double hashing collision resolution
         int Rehash ();                  //Rehash the table
-        int ConvertKey (const string&); //Convert string key to int
         int FindHash(const string&);    //Hash with probing to find a key
         int InsertHash(const string&);  //Hash with probing to insert a key
         bool IsPrime(int);              //Find prime table sizes
