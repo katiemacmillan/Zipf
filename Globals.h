@@ -4,9 +4,7 @@
 
 
 
-const char* DELIMITERS = " ,.*!";
-
-const char* VALID = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+const char* VALID = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'";
 
 #endif
 
