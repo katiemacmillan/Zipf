@@ -304,9 +304,9 @@ Edited: Katherine MacMillan
 WriteCSV takes a sorted list of integer-string pairs and writes the
 Zipf's law concordance information to a .csv file.
 
-It writes out the rank of each string, along with its frequency and
-the product of the two to a .csv file with the same name as the orginal 
-text file from which the strings were obtained.
+It writes out the average rank of each frequency group, along with the 
+frequency and the product of the two to a .csv file with the same name 
+as the orginal text file from which the strings were obtained.
 **********************************************************************/
 void WriteCSV ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize )
 {
