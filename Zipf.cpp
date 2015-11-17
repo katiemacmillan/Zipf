@@ -60,8 +60,8 @@ const char* VALID = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'";
 
 /****Function Declarations****/
 int Compare ( const void* a, const void* b );
-void WriteFiles ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize );
-
+void WriteWRD ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize );
+void WriteCSV ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize );
 
 /**********************************************************************
                             main
@@ -163,11 +163,16 @@ int main ( int argc, char** argv )
 
     // sort list and write data to file
     qsort ( wordList, count, sizeof ( tableEntry ), Compare );
-    WriteFiles ( argv[1],wordList, wordCount, maxStrLen, count );
+    WriteWRD ( argv[1],wordList, wordCount, maxStrLen, count );
+    WriteCSV ( argv[1],wordList, wordCount, maxStrLen, count );
 
     // display program runtime
     t = clock () - t;
     cout << "Time to read in, hash, sort and write out data: " << (float) t / CLOCKS_PER_SEC << " seconds" << endl;
+
+    // prevent memory leaks
+  	delete[] wordList;
+
 	return 0;
 }
 
@@ -195,25 +200,33 @@ int Compare ( const void* a, const void* b )
 
 
 /**********************************************************************
-                            WriteFiles
+                            WriteWRD
 ***********************************************************************
 Author: Alex Iverson
+Edited: Katherine MacMillan
 ***********************************************************************
+WriteWRD takes a sorted list of integer-string pairs and prints the
+strings and their counts first in frequency groups and alphabetically
+within those groups.
 
+It also calculates the ranks of each string, and displays the range
+of ranks contained within a frequency group, as well as the average
+rank composed by the total of the averag of the ranks in the group.
+
+This data, along with a file header is written to a .wrd file with
+the same name as the original text file from which the strings were
+obtained.
 **********************************************************************/
-void WriteFiles ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize )
+void WriteWRD ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize )
 {
+	// prepare .wrd filename
 	char* wrdFname = strdup ( origFile );
   	strcpy ( wrdFname + strlen ( wrdFname ) - 3, "wrd" );
 
-  	char* csvFname = strdup ( origFile );
-  	strcpy ( csvFname + strlen ( csvFname ) - 3, "csv" );
-
-  	//open outstream files
+  	// open outstream files
   	ofstream wrdout ( wrdFname );
-  	ofstream csvout ( csvFname );
-
-  	//print headers
+  	
+  	// print headers
 	wrdout << "Zipf's Law: word concordance" << endl;
 	wrdout << "----------------------------" << endl;
 	wrdout << "File:            " << right << origFile << endl;
@@ -222,15 +235,7 @@ void WriteFiles ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, i
 	wrdout << "Word Frequencies                                               Ranks    Avg Rank" << endl;
 	wrdout << "----------------                                               -----    --------" << endl;
 
-	csvout << "Zipf's Law: word concordance" << endl;
-	csvout << "----------------------------" << endl;
-	csvout << "File:            " << right << origFile << endl;
-	csvout << "Total words:     " << right << nWords << endl;
-	csvout << "Distinct words:  " << right << tabSize << endl;
-	csvout << endl;
-	csvout << "rank, freq, r*f" << endl;
-
-	//set up initial itterators, ranks and counts
+	// set up initial itterators, ranks and counts
 	auto freqend = &freq[tabSize + 1];
 	int rank = 1;
 	int nOccs = freq[0].first;
@@ -244,8 +249,7 @@ void WriteFiles ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, i
 			int colIdx = 0;
 			float avgRank = rank + double ( rankCount - 1 ) / 2;
 
-			csvout << avgRank << ", " << nOccs << ", " << avgRank*nOccs << endl;
-
+			// prepare frequency group header for writing out
 			string wordHeader;
 			if ( nOccs > 1 )
 				wordHeader = "Words occurring " + to_string ( nOccs ) + " times:";
@@ -253,15 +257,19 @@ void WriteFiles ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, i
       			wordHeader = "Words occurring once:";
     		wrdout << wordHeader;
 
+    		// write out rank(s) for word(s) in frequency group
 	    	if ( rankCount == 1 ) 
 				wrdout << setw ( 68 - wordHeader.length () ) << setfill ( ' ' ) << right << rank;
 	      	else 
 	      	{
 				string rankstring = to_string ( rank ) + "-" + to_string ( rank + rankCount - 1 );
 				wrdout << string ( 68 - wordHeader.length () - rankstring.length (), ' ' ) << rankstring;
-	      	}	      	
+	      	}
+
+	      	// write out average rank of words in frequency group	      	
 	      	wrdout << setw ( 12 ) << right << avgRank << endl;
 
+	      	// write out words in frequency group, equally spaceing them based on longest word
 	      	int nCols = 80 / maxStrLen;
 	      	for ( auto rankit = rankBegin; rankit < freqit; ++rankit ) 
 	      	{
@@ -273,16 +281,71 @@ void WriteFiles ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, i
 				}
       		}
 
-      		wrdout << "\n\n";
+      		// increment counts and move iterators to prepare for next frequency group
+      		wrdout << "\n" << endl;
    	   		rank += rankCount;
     	  	rankCount = 0;
       		nOccs = freqit->first;
 	      	rankBegin = freqit;
 		}
-
     	++rankCount;
 	}
-  	delete[] freq;
+
+    // prevent memory leaks
   	free ( wrdFname );
+}
+
+/**********************************************************************
+                            WriteCSV
+***********************************************************************
+Author: Alex Iverson
+Edited: Katherine MacMillan
+***********************************************************************
+WriteCSV takes a sorted list of integer-string pairs and writes the
+Zipf's law concordance information to a .csv file.
+
+It writes out the rank of each string, along with its frequency and
+the product of the two to a .csv file with the same name as the orginal 
+text file from which the strings were obtained.
+**********************************************************************/
+void WriteCSV ( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize )
+{
+  	char* csvFname = strdup ( origFile );
+  	strcpy ( csvFname + strlen ( csvFname ) - 3, "csv" );
+
+  	// open outstream files
+  	ofstream csvout ( csvFname );
+
+  	// print headers
+	csvout << "Zipf's Law: word concordance" << endl;
+	csvout << "----------------------------" << endl;
+	csvout << "File:            " << right << origFile << endl;
+	csvout << "Total words:     " << right << nWords << endl;
+	csvout << "Distinct words:  " << right << tabSize << "\n" << endl;
+	csvout << "rank, freq, r*f" << endl;
+
+	// set up initial itterators, ranks and counts
+	auto freqend = &freq[tabSize + 1];
+	int rank = 1;
+	int nOccs = freq[0].first;
+	int rankCount = 0;
+
+	// write data out to .csv file
+	for ( auto freqit = freq; freqit < freqend; ++freqit ) 
+	{
+		if ( nOccs != freqit->first ) 
+		{
+			float avgRank = rank + double ( rankCount - 1 ) / 2;
+			csvout << avgRank << ", " << nOccs << ", " << avgRank*nOccs << endl;
+
+			// increment counts and move iterators
+   	   		rank += rankCount;
+    	  	rankCount = 0;
+      		nOccs = freqit->first;
+		}
+    	++rankCount;
+	}
+
+    // prevent memory leaks
   	free ( csvFname );
 }

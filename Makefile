@@ -34,4 +34,4 @@ clean:
 	rm -f *.o *~ core
 
 cleanall:
-	rm -f *.o *~ core Zipf
+	rm -f *.o *~ core zipf
