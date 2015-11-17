@@ -9,18 +9,20 @@ The hashtable class consists of two ineger variables called 'size' and
 'size' holds the total size of the 'table', while 'entries' holds
 the number of actual entries that 'table' contains. 
 
-'table' is an array of structures named 'Data', which consists of two 
-fields; an integer field called 'count' and a string field called 
-'key'. 
+'table' is an array of integer and string pairs, refered to as a
+'tableEntry'. The for each index 'i' in 'table' the the first 
+field holds an integer for the number of times a key appears in
+the loaded file, and the second field holds the string representing
+the key. 
 
 When created, the user may use the default tablesize, or specify
-their own. 'table' is then dynamically allocated to hold an 'n' Data
-structures. Each 'key' field is initially set to an empty string, and
-each 'count' field is set to 0. 
+their own. 'table' is then dynamically allocated to hold an 'n' 
+tableEntries. Each table[i].first is initialized to 0 and each
+table[i].second is set to an empty string.
 
-Whenever a string is inserted into the hashtable object, the 'key' 
-field is set to the string value, the 'count' field is set to 1, and
-the 'entries' variable is incremented by 1.
+Whenever a string is inserted into the hashtable object, the second 
+field in the index is set to the string value, the first field is set 
+to 1, and the 'entries' variable is incremented by 1.
 
 Entries are instered into 'table' based on hashing, using linear
 probing and open addressing to resolve collisions. 
@@ -37,7 +39,7 @@ entry counts can be decremented using the Decrease function.
 **********************************************************************/
 Hashtable::Hashtable ( int n )
 {
-	//create new table of size n, set size to n
+	// create new table of size n, set size to n
 	table = new tableEntry[n];
 	size = n;
 }
@@ -48,11 +50,11 @@ Hashtable::Hashtable ( int n )
 **********************************************************************/
 Hashtable::Hashtable ( const Hashtable& hash )
 {
-	//create new table same size as hash
+	// create new table same size as hash
 	size = hash.size;
 	table = new tableEntry[size];
 
-	//copy values from hash into new table
+	// copy values from hash into new table
 	for ( int i = 0; i < size; i++ )
 	{
 		if ( table[i].second != "" )
@@ -74,23 +76,24 @@ Hashtable::~Hashtable ()
 /**********************************************************************
                             GetCount
 **********************************************************************
-GetCount retrieves the value of the count field for a given index or
+GetCount retrieves the value of the first field for a given index or
 target string.
 
 When an integer is passed to the function, it is used as an index into
 the hashtable. If it is a valid index for the table, the value of that
-index's count field is returned to the user. If 'i' is not a valid 
+index's first field is returned to the user. If 'i' is not a valid 
 index into the table, -1 is returned instead.
 
 When a string is passed to the function, the FindHash function is used
 to determine the string's index in the table. If the string is found
-then the corresponding count field for its index is returned to the
-user. Otherwise, 0 is returned.
+in the returned index's second field then the index's first field is 
+returned to the user. Otherwise, 0 is returned.
 **********************************************************************/
 int Hashtable::GetCount ( int i )
 { 
+	// invalid index
 	if ( ( i < 0 ) || ( i >= size ) )
-		return -1;				//invalid index
+		return -1;
 
 	return table[i].first; 
 }
@@ -101,7 +104,8 @@ int Hashtable::GetCount ( const string& k )
 	if ( i > -1 )
 		return table[i].first;
 
-	return 0;					//string not found in table
+	// string not found in table
+	return 0;
 }
 
 /**********************************************************************
@@ -109,7 +113,7 @@ int Hashtable::GetCount ( const string& k )
 **********************************************************************
 This function takes in an index into the hashtable as the variable 'i'
 and then returns to the user the string that is held in that index's
-key field. If the value in 'i' is not a valid index into the table,
+second field. If the value in 'i' is not a valid index into the table,
 the string "*BAD INDEX*" is returned to the user instead. 
 **********************************************************************/
 string Hashtable::GetKey ( int i )
@@ -168,31 +172,38 @@ float Hashtable::GetLoadFactor () { return (float) entries / size; }
 **********************************************************************
 Insert takes an insertion string the the variable 'k' and uses the
 InsertHash fuction to retrieve an index. If the insertion string is 
-already held in the retrieved index's key field, then the index's 
-count field is incremented by one.
+already held in the retrieved index's second field, then the index's 
+first field is incremented by one.
 
-Otherwise, the index's key field is set to the insertion string,
-its count field is set to 1 and the hashtable's 'entries' variable
+Otherwise, the index's second field is set to the insertion string,
+its first field is set to 1 and the hashtable's 'entries' variable
 is incremented by one, indicating that another entry has been added
 to the table.
+
+After a new entry has been added to the table, the Insert function
+checks the load factor of the table. If the table is more than 75%
+full, the Rehash function is called
 **********************************************************************/
 void Hashtable::Insert ( const string& k )
 {
 	int i = InsertHash(k);
 
-	if ( table[i].second == k )		//increase frequency count if key is already there 
+	// increase frequency count if key exists
+	if ( table[i].second == k )
 		table[i].first++;
 
 	else
-	{									//insert key and increment count
+	{	
+		// insert and increment table entries
+		table[i].first++;
 		table[i].second = k;
-		table[i].first = 1;
-		entries++;						//increment number of items in table
+		entries++;
 		
+		// if table is more than 75% full after insert, rehash it
 		if ( ( (float) entries / size ) > 0.75 )
 		{
 			cout << "Table is at least 75% full!\nRehashing now..."<< endl;
-			Rehash();					//if table is more than 75% full after insert, rehash it
+			Rehash();
 		}
 	}	
 }
@@ -203,8 +214,8 @@ void Hashtable::Insert ( const string& k )
 The Remove function allows the user to remove an entry from the
 hashtable, either by specifying an index in the table, or by 
 specifying the string to be deleted. When an entry is deleted the
-position's count field is set to 0, its key field is set to "*DELETED*"
-and the hashtable's 'entries' variable is decremented by one.
+position's first field is set to 0, its second field is set to 
+"*DELETED*" and the hashtable's 'entries' variable is decremented by one.
 
 When an integer is passed to the function, it is used as an index into
 the hashtable. If it is a valid index for the table the entry is removed.
@@ -215,8 +226,11 @@ then the entry at its index is removed
 **********************************************************************/
 void Hashtable::Remove ( int i )
 { 
+	// invalid index
 	if ( ( i < 0 ) || ( i >= size ) )
-		return;							//invalid index
+		return;	
+
+	// reset count, mark as deleted and decrement entries
 	table[i].first = 0;
 	table[i].second = "*DELETED*";
 	entries--;
@@ -226,11 +240,12 @@ void Hashtable::Remove ( const string& k )
 { 
 	int i = FindHash(k);
 
-	if ( table[i].second == k )		//if key is there, remove it reset count 
+	// if key is there reset count, mark as deleted and decrement entries
+	if ( table[i].second == k )
 	{
-		table[i].second = "*DELETED*";
 		table[i].first = 0;
-		entries--;						//decrement entries count
+		table[i].second = "*DELETED*";
+		entries--;
 	}
 }
 
@@ -239,7 +254,7 @@ void Hashtable::Remove ( const string& k )
 **********************************************************************
 The Decrease function allows the user to decrement the count of a 
 specific word or index in the hashtable. When the count gets to 0
-the string in the key field is then marked as deleted by setting it
+the string in the second field is then marked as deleted by setting it
 to "*DELETED*"
 
 When an integer is passed to the function, it is used as an index into
@@ -250,22 +265,30 @@ When a string is passed to the function, the FindHash function is used
 to determine the string's index in the table. If the string is found
 then the corresponding count field for its index is decremented.
 **********************************************************************/
-void Hashtable::Decrease ( int i )			//decrease the count of an index
+void Hashtable::Decrease ( int i )
 { 
+	// invalid index
 	if ( ( i < 0 ) || ( i >= size ) )
-		return;									//invalid index
+		return;
+
 	table[i].first--;
+
+	// if count hits 0, mark key as deleted
 	if ( table[i].first == 0 )
 		table[i].second = "*DELETED*";
 }
 
 
-void Hashtable::Decrease ( const string& k )	//decrease the count of a string
+void Hashtable::Decrease ( const string& k )
 { 
 	int i = FindHash(k);
-	if ( table[i].second == k )				//if key is there, decrement count 
+
+	// if key is there, decrement count
+	if ( table[i].second == k )
 		table[i].first--;
-	if ( table[i].first == 0 )				//if count hits 0, mark key as deleted
+
+	// if count hits 0, mark key as deleted
+	if ( table[i].first == 0 )
 		table[i].second = "*DELETED*";
 }
 
@@ -296,10 +319,10 @@ unsigned long Hashtable::HashFunction ( const string& k )
                             InsertHash
 **********************************************************************
 The InsertHash function performs its probe sequence by looking for 
-entries with a count of 0, or entries with a key field matching the
+entries with a count of 0, or entries with a second field matching the
 insertion string held in the variable 'k'. 
 
-By looking for a count field value of 0, insertion strings that are 
+By looking for a first field value of 0, insertion strings that are 
 not already in the hashtable can be inserted into positions that had
 held entries, but which were deleted, thus wasting as little space
 within the table as possible.
@@ -309,7 +332,7 @@ int Hashtable::InsertHash ( const string& k )
 {
 	int i = ( HashFunction(k) )%size;
 
-	//probe table until either empty/deleted spot or matching key is found
+	// probe table until either empty/deleted spot or matching key is found
 	while ( (table[i].first != 0 ) && ( table[i].second != k ) )
 		i = ( i + 1 ) % size;
 	
@@ -320,8 +343,9 @@ int Hashtable::InsertHash ( const string& k )
                             FindHash
 **********************************************************************
 The FindHash function performs its probe sequence by looking for
-either the target string or an empty string in the key field of each
+either the target string or an empty string in the second field of each
 examined index.
+
 The function will stop probing only when the target string is found,
 or when an empty string is encountered. This ensures that if an entry
 which preceeds the target gets deleted, the probe sequence will 
@@ -331,14 +355,16 @@ int Hashtable::FindHash ( const string& k )
 {
 	int i = ( HashFunction(k) ) % size;
 
-	//probe table until either empty string or matching key is found
+	// probe table until either empty string or matching key is found
 	while ( ( table[i].second != "" ) && ( table[i].second != k ) )
-		i = ( i + 1 ) % size;	//linear probing
+		i = ( i + 1 ) % size;
 	
 	if ( table[i].second == k )
 		return i;
+
+	// not in table
 	else 
-		return -1;						//not in the table
+		return -1;
 }
 
 /**********************************************************************
@@ -357,28 +383,28 @@ within the new table.
 **********************************************************************/
 void Hashtable::Rehash ()
 {
-	//store data values
+	// store data values
 	tableEntry* temp = table;
 	int oldSize = size;
 
-	//get new table size
+	// get new table size
 	size = size*2;
 	while ( !IsPrime(size) )
 		size++;
 
-	//resize table
+	// resize table
 	table = new tableEntry [size];
 	int index;
 
-	//hash entries from orginal table into new table
+	// hash entries from orginal table into new table
 	for ( int i = 0; i < oldSize; i++ )
 	{
-		//skip empty and deleted entries
+		// skip empty and deleted entries
 		if ( ( temp[i].second != "" ) && ( temp[i].second != "*DELETED*" ) )
 		{
 			index = InsertHash ( temp[i].second );
-			table[index].second = temp[i].second;
 			table[index].first = temp[i].first;
+			table[index].second = temp[i].second;
 		}
 	}
 }
@@ -397,11 +423,14 @@ not a prime number, and false is returned.
 **********************************************************************/
 bool Hashtable::IsPrime ( int n )
 {
-    if ( n % 2 == 0 ) return false;				//is n divisible by 2
+	// if n is divisible by 2 it's not prime
+    if ( n % 2 == 0 ) 
+    	return false;
 
+    // if n is divisible by i, it's not prime
     for ( int i = 3; ( i * i ) <= n; i += 2 )
-        if ( n % i == 0 ) 						//is n divisible by i
-        	return false;						//n is not prime
+        if ( n % i == 0 )
+        	return false;
     
-    return true;								//n is prime
+    return true;
 }
