@@ -21,11 +21,11 @@ CXXFLAGS = $(CFLAGS)
 #------------------------------------------------------------------------------
 # Targets
 
-all: Zipf
+all: zipf
 
 #------------------------------------------------------------------------------
 
-Zipf:	Hashtable.o Zipf.o Tokenizer.o
+zipf:	Hashtable.o Zipf.o Tokenizer.o
 	$(LINK) -o $@ $^ 
 
 #------------------------------------------------------------------------------
@@ -34,4 +34,4 @@ clean:
 	rm -f *.o *~ core
 
 cleanall:
-	rm -f *.o *~ core Zipf
+	rm -f *.o *~ core zipf
