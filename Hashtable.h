@@ -28,11 +28,11 @@ class Hashtable
         int entries = 0;
 
         /******Private Functions******/
-        unsigned long HashFunction ( const string& );   
-        int InsertHash ( const string& );               
-        int FindHash ( const string& );                 
-        void Rehash ();                                 
-        bool IsPrime ( int );                           
+        unsigned long HashFunction( const string& );   
+        int InsertHash( const string& );               
+        int FindHash( const string& );                 
+        void Rehash();                                 
+        bool IsPrime( int );                           
     public:
         /******Constructor******/
         Hashtable( int n = 1033);
@@ -44,20 +44,20 @@ class Hashtable
         ~Hashtable();
 
         /******Getters******/
-        int GetCount ( int );
-        int GetCount ( const string& );
-        string GetKey ( int );
-        int GetIndex ( const string& );
-        int GetSize ();
-        int GetEntryCount ();
-        float GetLoadFactor ();
+        int GetCount( int );
+        int GetCount( const string& );
+        string GetKey( int );
+        int GetIndex( const string& );
+        int GetSize();
+        int GetEntryCount();
+        float GetLoadFactor();
 
         /******Mutators******/
-        void Insert ( const string& );
-        void Remove ( int );
-        void Remove ( const string& );
-        void Decrease ( int );
-        void Decrease ( const string& );
+        void Insert( const string& );
+        void Remove( int );
+        void Remove( const string& );
+        void Decrease( int );
+        void Decrease( const string& );
 
 };
 #endif

@@ -9,6 +9,6 @@
 using namespace std;
 
 // string tokenizer that searches for symbols of a delimiter string
-void tokenize ( const string& , vector<string>& , const string& );
+void Tokenize( const string& , vector<string>& , const string& );
 
 #endif
