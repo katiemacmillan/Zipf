@@ -60,8 +60,9 @@ const char* VALID = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'";
 
 /****Function Declarations****/
 int TableComparator( const void* a, const void* b );
-void WriteWRD( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize );
-void WriteCSV( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize );
+void WriteFiles( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize );
+//void WriteWRD( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize );
+//void WriteCSV( char* origFile, tableEntry* freq, int nWords, int maxStrLen, int tabSize );
 
 /**********************************************************************
                             main
@@ -163,6 +164,7 @@ int main( int argc, char** argv )
     // sort list and write data to file
     qsort( wordList, count, sizeof( tableEntry ), TableComparator );
     WriteFiles( argv[1],wordList, wordCount, maxStrLen, count );
+	//WriteWRD( argv[1],wordList, wordCount, maxStrLen, count );
     //WriteCSV( argv[1],wordList, wordCount, maxStrLen, count );
 
     // display program runtime
@@ -170,7 +172,7 @@ int main( int argc, char** argv )
     cout << "Time to read in, hash, sort and write out data: " << (float) t / CLOCKS_PER_SEC << " seconds" << endl;
 
     // clean heap-allocated memory
-  	delete[] wordList;
+  	//delete[] wordList;
 
 	return 0;
 }
@@ -236,7 +238,7 @@ void WriteFiles( char* origFile, tableEntry* freq, int nWords, int maxStrLen, in
 	wrdout << "----------------------------" << endl;
 	wrdout << "File:            " << right << origFile << endl;
 	wrdout << "Total words:     " << right << nWords << endl;
-	wrdout << "Distinct words:  " << right << tab.Size() << endl;
+	wrdout << "Distinct words:  " << right << tabSize << endl;
 	wrdout << endl;
 	wrdout << "Word Frequencies                                               Ranks    Avg Rank" << endl;
 	wrdout << "----------------                                               -----    --------" << endl;
@@ -246,10 +248,12 @@ void WriteFiles( char* origFile, tableEntry* freq, int nWords, int maxStrLen, in
 	csvout << "----------------------------" << endl;
 	csvout << "File:            " << right << origFile << endl;
 	csvout << "Total words:     " << right << nWords << endl;
-	csvout << "Distinct words:  " << right << tab.Size() << endl;
+	csvout << "Distinct words:  " << right << tabSize << endl;
 	csvout << endl;
 	csvout << "rank, freq, r*f" << endl;
-	auto freqend = &freq[tab.Size() + 1];
+
+	auto freqit = &freq[tabSize+1];
+	auto freqend = &freq[tabSize + 1];
 	int rank = 1;
 	int nOccs = freq[0].first;
 	int rankCount = 0;
@@ -313,12 +317,10 @@ void WriteFiles( char* origFile, tableEntry* freq, int nWords, int maxStrLen, in
 	free( wrdFname );
 	free( csvFname );
 }
-
 /**********************************************************************
                             WriteWRD
 ***********************************************************************
 Author: Alex Iverson
-Edited: Katherine MacMillan
 ***********************************************************************
 WriteWRD takes a sorted list of integer-string pairs and prints the
 strings and their counts first in frequency groups and alphabetically
@@ -410,7 +412,7 @@ obtained.
 
     // clean heap-allocated memory
   	free ( wrdFname );
-}
+}*/
 
 /**********************************************************************
                             WriteCSV
